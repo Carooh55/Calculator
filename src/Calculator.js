@@ -1,102 +1,94 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Calculator";
 
-export default function Calculator() {
+const Calculator = () => {
+  const [display, setDisplay] = useState("0");
+
+  const handleButtonClick = (value) => {
+    setDisplay((prevDisplay) =>
+      prevDisplay === "0" ? value : prevDisplay + value
+    );
+  };
+
+  const handleClear = () => {
+    setDisplay("0");
+  };
+
+  const handleDelete = () => {
+    setDisplay((prevDisplay) =>
+      prevDisplay.length > 1 ? prevDisplay.slice(0, -1) : "0"
+    );
+  };
+
+  const handleCalculate = () => {
+    try {
+      // Replace percentage with division by 100
+      const result = eval(display.replace(/(\d+)%/g, "($1/100)"));
+      setDisplay(String(result));
+    } catch (e) {
+      setDisplay("Error");
+    }
+  };
+
   return (
     <div className="container">
       <div className="calculator">
-        <form>
-          <div className="display">
-            <input type="text" placeholder="0" name="display" />
-          </div>
-          <div>
-            <input
-              type="button"
-              value="CA"
-              onclick="display.value='' "
-              className="operator"
-            />
-            <input
-              type="button"
-              value="DE"
-              onclick="display.value=display.value.toString().slice(0,-1)"
-              classsName="operator"
-            />
-            <input
-              type="button"
-              value="%"
-              onclick="display.value+='%'"
-              className="operator"
-            />
-            <input
-              type="button"
-              value="/"
-              onclick="display.value+='/'"
-              className="operator"
-            />
-          </div>
-          <div>
-            <input type="button" value="9" onclick="display.value+='9'" />
-            <input type="button" value="8" onclick="display.value+='8'" />
-            <input type="button" value="7" onclick="display.value+='7'" />
-            <input
-              type="button"
-              value="*"
-              onclick="display.value+='*'"
-              className="operator"
-            />
-          </div>
-          <div>
-            <input type="button" value="6" onclick="display.value+='6'" />
-            <input type="button" value="5" onclick="display.value+='5'" />
-            <input type="button" value="4" onclick="display.value+='4'" />
-            <input
-              type="button"
-              value="-"
-              onclick="display.value+='-'"
-              className="operator"
-            />
-          </div>
-          <div>
-            <input type="button" value="3" onclick="display.value+='3'" />
-            <input type="button" value="2" onclick="display.value+='2'" />
-            <input type="button" value="1" onclick="display.value+='1'" />
-            <input
-              type="button"
-              value="+"
-              onclick="display.value+='+'"
-              className="operator"
-            />
-          </div>
-          <div>
-            <input type="button" value="0" onclick="display.value+='0'" />
-            <input
-              type="button"
-              value="."
-              onclick="display.value+='.'"
-              className="operator"
-            />
-            <input
-              type="button"
-              value=","
-              onclick="display.value+=','"
-              className="operator"
-            />
-            <input
-              type="button"
-              value="="
-              onclick="
-              try{
-              display.value =eval(display.value.replace(/(\d+\.?d*) %/g, '($1/100)'));
-              }catch (e){
-              display.value='Error'
-              }
-              "
-              className="operator equal"
-            />
-          </div>
-        </form>
+        <div className="display">
+          <input type="text" value={display} readOnly />
+        </div>
+        <div>
+          <button onClick={handleClear} className="operator">
+            CA
+          </button>
+          <button onClick={handleDelete} className="operator">
+            DE
+          </button>
+          <button onClick={() => handleButtonClick("%")} className="operator">
+            %
+          </button>
+          <button onClick={() => handleButtonClick("/")} className="operator">
+            /
+          </button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick("9")}>9</button>
+          <button onClick={() => handleButtonClick("8")}>8</button>
+          <button onClick={() => handleButtonClick("7")}>7</button>
+          <button onClick={() => handleButtonClick("*")} className="operator">
+            *
+          </button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick("6")}>6</button>
+          <button onClick={() => handleButtonClick("5")}>5</button>
+          <button onClick={() => handleButtonClick("4")}>4</button>
+          <button onClick={() => handleButtonClick("-")} className="operator">
+            -
+          </button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick("3")}>3</button>
+          <button onClick={() => handleButtonClick("2")}>2</button>
+          <button onClick={() => handleButtonClick("1")}>1</button>
+          <button onClick={() => handleButtonClick("+")} className="operator">
+            +
+          </button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick("0")}>0</button>
+          <button onClick={() => handleButtonClick(".")} className="operator">
+            .
+          </button>
+          <button onClick={() => handleButtonClick(",")} className="operator">
+            ,
+          </button>
+          <button onClick={handleCalculate} className="operator equal">
+            =
+          </button>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Calculator;
