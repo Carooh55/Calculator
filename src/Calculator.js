@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import "./Calculator";
+import { evaluate } from "mathjs";
 
-const Calculator = () => {
+import "./Calculator.css";
+
+export default function Calculator() {
   const [display, setDisplay] = useState("0");
 
   const handleButtonClick = (value) => {
@@ -22,8 +24,8 @@ const Calculator = () => {
 
   const handleCalculate = () => {
     try {
-      // Replace percentage with division by 100
-      const result = eval(display.replace(/(\d+)%/g, "($1/100)"));
+      const sanitizedDisplay = display.replace(/(\d+)%/g, "($1/100)");
+      const result = evaluate(sanitizedDisplay);
       setDisplay(String(result));
     } catch (e) {
       setDisplay("Error");
@@ -79,9 +81,6 @@ const Calculator = () => {
           <button onClick={() => handleButtonClick(".")} className="operator">
             .
           </button>
-          <button onClick={() => handleButtonClick(",")} className="operator">
-            ,
-          </button>
           <button onClick={handleCalculate} className="operator equal">
             =
           </button>
@@ -89,6 +88,4 @@ const Calculator = () => {
       </div>
     </div>
   );
-};
-
-export default Calculator;
+}
